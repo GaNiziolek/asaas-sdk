@@ -43,3 +43,5 @@ class Customer:
         self.stateInscription = stateInscription 
         self.observations = observations
 
+    def __repr__(self) -> str:
+        return f'Customer(id={self.id}, name={self.name}, email={self.email})'

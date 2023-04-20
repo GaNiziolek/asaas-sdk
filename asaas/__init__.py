@@ -7,12 +7,12 @@ from urllib.parse import urljoin
 from typing import Optional
 from datetime import date
 
-from customers import Customer
+from asaas.customers import Customer
 
-import payments
-from payments import Payment
+from asaas import payments
+from asaas.payments import Payment
 
-from exceptions import ErroAsaas
+from asaas.exceptions import ErroAsaas
 
 class Asaas():
     def __init__(self, access_token, production = False):
@@ -64,7 +64,6 @@ class Asaas():
                 raise ErroAsaas(response.json())
 
         return response.json()
-
 
 class Customers():
     

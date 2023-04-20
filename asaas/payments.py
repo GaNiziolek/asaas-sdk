@@ -3,9 +3,9 @@ from typing import List
 from urllib.parse import urljoin
 from datetime import date
 
-from customers import Customer
+from asaas.customers import Customer
 
-from utils import pickable
+from asaas.utils import pickable
 
 class Status:
     PENDING = 'PENDING'
@@ -260,6 +260,9 @@ class Payment(pickable):
         self.cannotEditReason = cannotEditReason
         self.creditCard = creditCard
 
+    def __repr__(self) -> str:
+        return f'Payment(id={self.id}, customer={self.customer}, billingType={self.billingType}, value={self.value})'
+    
 if __name__ == '__main__':
     import jsonpickle
     import json
