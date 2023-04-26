@@ -83,7 +83,7 @@ class Customers():
             limit:             Optional[int] = None
         ) -> dict:
         
-        list = self.asaas.get(
+        customers = self.asaas.get(
             endpoint = self.endpoint, 
             params = {
                 'name':              name,
@@ -96,14 +96,21 @@ class Customers():
             }
         )
 
-        return list
+        customers_list = []
+        
+        for customer in customers.get('data'):
+            customers_list.append(
+                Customer(**customer)
+            )
+
+        return customers_list
 
     def get(self, id: str) -> dict:
         customer = self.asaas.get(
             endpoint = self.endpoint + '/' + id
         )
 
-        return customer
+        return Customer(**customer)
 
     def new(self,
             name: str,
@@ -147,29 +154,8 @@ class Customers():
                 'groupName': groupName
             }
         )
-        
-        new_customer = Customer(
-            id = response.get('id'),
-            dateCreated = date.fromisoformat(response.get('dateCreated')),
-            name = response.get('name'),
-            cpfCnpj = response.get('cpfCnpj'),
-            email = response.get('email'),
-            phone = response.get('phone'),
-            mobilePhone = response.get('mobilePhone'),
-            address = response.get('address'),
-            addressNumber = response.get('addressNumber'),
-            complement = response.get('complement'),
-            province = response.get('province'),
-            postalCode = response.get('postalCode'),
-            externalReference = response.get('externalReference'),
-            notificationDisabled = response.get('notificationDisabled'),
-            additionalEmails = response.get('additionalEmails'),
-            municipalInscription = response.get('municipalInscription'),
-            stateInscription = response.get('stateInscription'),
-            observations = response.get('observations')
-        )
-        
-        return new_customer
+
+        return Customer(**response)
 
 class Payments:
     
@@ -184,7 +170,7 @@ class Payments:
             endpoint = self.endpoint + '/' + id
         )
 
-        return customer
+        return Payment(**customer)
 
     def new(self,
             customer: Customer,
@@ -363,7 +349,9 @@ if __name__ == '__main__':
 
     asaas = Asaas(acess_token, production = False)
 
-    roberto = asaas.customers.new('Roberto', '24971563792')
+    roberto = asaas.customers.get('cus_000005267821')
+
+    exit()
 
     pagamento = asaas.payments.new(
         customer = roberto,
