@@ -146,8 +146,8 @@ class CreditCardHolderInfo(pickable):
         cpfCnpj: str, 
         postalCode: str,
         addressNumber: str,
-        addressComplement: str,
         phone: str,
+        addressComplement: str = None,
         mobilePhone: Optional[str] = None
     ) -> None:
         self.name = name
@@ -155,8 +155,8 @@ class CreditCardHolderInfo(pickable):
         self.cpfCnpj = cpfCnpj
         self.postalCode = postalCode
         self.addressNumber = addressNumber
-        self.addressComplement = addressComplement
         self.phone = phone
+        self.addressComplement = addressComplement
         self.mobilePhone = mobilePhone
 
 class CreditCardToken(pickable):
