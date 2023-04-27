@@ -12,7 +12,7 @@ from asaas.customers import Customer
 from asaas import payments
 from asaas.payments import Payment
 
-from asaas.exceptions import ErroAsaas
+from asaas.exceptions import raise_for_error
 
 class Asaas():
     def __init__(self, access_token, production = False):
@@ -41,15 +41,11 @@ class Asaas():
             params  = params
         )
 
-        try:
-            response.raise_for_status()
-        except HTTPError as e:
-            if 'errors' in response.json():
-                raise ErroAsaas(response.json())
+        raise_for_error(response)
 
         return response.json()
     
-    def post(self, endpoint: str, json: Optional[dict] = None) -> dict:
+    def post(self, endpoint: str, json: dict) -> dict:
 
         response = self.session.post(
             url     = urljoin(self.url, endpoint),
@@ -57,11 +53,7 @@ class Asaas():
             json    = json
         )
 
-        try:
-            response.raise_for_status()
-        except HTTPError as e:
-            if 'errors' in response.json():
-                raise ErroAsaas(response.json())
+        raise_for_error(response)        
 
         return response.json()
 
@@ -83,7 +75,7 @@ class Customers():
             limit:             Optional[int] = None
         ) -> dict:
         
-        list = self.asaas.get(
+        customers = self.asaas.get(
             endpoint = self.endpoint, 
             params = {
                 'name':              name,
@@ -96,14 +88,21 @@ class Customers():
             }
         )
 
-        return list
+        customers_list = []
+        
+        for customer in customers.get('data'):
+            customers_list.append(
+                Customer(**customer)
+            )
+
+        return customers_list
 
     def get(self, id: str) -> dict:
         customer = self.asaas.get(
             endpoint = self.endpoint + '/' + id
         )
 
-        return customer
+        return Customer(**customer)
 
     def new(self,
             name: str,
@@ -147,29 +146,8 @@ class Customers():
                 'groupName': groupName
             }
         )
-        
-        new_customer = Customer(
-            id = response.get('id'),
-            dateCreated = date.fromisoformat(response.get('dateCreated')),
-            name = response.get('name'),
-            cpfCnpj = response.get('cpfCnpj'),
-            email = response.get('email'),
-            phone = response.get('phone'),
-            mobilePhone = response.get('mobilePhone'),
-            address = response.get('address'),
-            addressNumber = response.get('addressNumber'),
-            complement = response.get('complement'),
-            province = response.get('province'),
-            postalCode = response.get('postalCode'),
-            externalReference = response.get('externalReference'),
-            notificationDisabled = response.get('notificationDisabled'),
-            additionalEmails = response.get('additionalEmails'),
-            municipalInscription = response.get('municipalInscription'),
-            stateInscription = response.get('stateInscription'),
-            observations = response.get('observations')
-        )
-        
-        return new_customer
+
+        return Customer(**response)
 
 class Payments:
     
@@ -184,13 +162,14 @@ class Payments:
             endpoint = self.endpoint + '/' + id
         )
 
-        return customer
+        return Payment(**customer)
 
     def new(self,
             customer: Customer,
             billingType: payments.BillingType,
-            value: float,
             dueDate: date,
+            value: Optional[float] = None,
+            totalValue: Optional[float] = None, 
             description: Optional[str] = None,
             externalReference: Optional[str] = None,
             installmentCount: Optional[str] = None,
@@ -215,7 +194,8 @@ class Payments:
                 'description': description,
                 'externalReference': externalReference,
                 'installmentCount': installmentCount,
-                'installmentValue': installmentValue, 
+                'installmentValue': installmentValue,
+                'totalValue': totalValue, 
                 'discount': discount,
                 'interest': interest,
                 'fine': fine,
@@ -363,7 +343,7 @@ if __name__ == '__main__':
 
     asaas = Asaas(acess_token, production = False)
 
-    roberto = asaas.customers.new('Roberto', '24971563792')
+    roberto = asaas.customers.get('cus_00000526a7821')
 
     pagamento = asaas.payments.new(
         customer = roberto,
@@ -372,8 +352,9 @@ if __name__ == '__main__':
         dueDate = date.today(),
         creditCard = payments.CreditCard(
             holderName = 'marcelo h almeida',
-            number = '5162306219378829',
-            expiryYear = '2024', expiryMonth = '05',
+            number = '5184019740373151',
+            expiryYear = '2024', 
+            expiryMonth = '05',
             ccv = '318'
         ).json(),
         creditCardHolderInfo = payments.CreditCardHolderInfo(

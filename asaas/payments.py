@@ -146,8 +146,8 @@ class CreditCardHolderInfo(pickable):
         cpfCnpj: str, 
         postalCode: str,
         addressNumber: str,
-        addressComplement: str,
         phone: str,
+        addressComplement: str = None,
         mobilePhone: Optional[str] = None
     ) -> None:
         self.name = name
@@ -155,8 +155,8 @@ class CreditCardHolderInfo(pickable):
         self.cpfCnpj = cpfCnpj
         self.postalCode = postalCode
         self.addressNumber = addressNumber
-        self.addressComplement = addressComplement
         self.phone = phone
+        self.addressComplement = addressComplement
         self.mobilePhone = mobilePhone
 
 class CreditCardToken(pickable):
@@ -176,89 +176,52 @@ class Payment(pickable):
         customer: Customer,
         dueDate: date,
         value: float,
-        netValue: Optional[float] = None,
-        paymentLink: Optional[str] = None,
-        subscription: Optional[str] = None,
-        installment: Optional[str] = None,
-        discount: Optional[Discount] = None,
-        interest: Optional[Interest] = None,
-        fine: Optional[Fine] = None,
-        billingType: Optional[BillingType] = None,
-        canBePaidAfterDueDate: Optional[bool] = None,
-        status: Optional[Status] = None,
-        pixTransaction: Optional[str] = None,
-        pixQrCodeId: Optional[str] = None,
-        description: Optional[str] = None,
-        externalReference: Optional[str] = None,
-        originalDueDate: Optional[str] = None,
-        originalValue: Optional[float] = None,
-        interestValue: Optional[float] = None,
-        confirmedDate: Optional[date] = None,
-        paymentDate: Optional[date] = None,
-        clientPaymentDate: Optional[date] = None,
-        installmentNumber: Optional[int] = None,
-        invoiceUrl: Optional[str] = None,
-        bankSlipUrl: Optional[str] = None,
-        transactionReceiptUrl: Optional[str] = None,
-        invoiceNumber: Optional[str] = None,
-        deleted: Optional[bool] = None,
-        postalService: Optional[bool] = None,
-        anticipated: Optional[bool] = None,
-        split: Optional[List[Split]] = None,
-        chargeback: Optional[Chargeback] = None,
-        refunds: Optional[List[Refund]] = None,
-        municipalInscription: Optional[str] = None,
-        stateInscription: Optional[str] = None,
-        canDelete: Optional[str] = None,
-        cannotBeDeletedReason: Optional[str] = None,
-        canEdit: Optional[str] = None,
-        cannotEditReason: Optional[str] = None,
-        creditCard: Optional[CreditCardToken] = None
+        **kwargs
     ) -> None:
         
-        self.id = id
-        self.dateCreated = dateCreated
-        self.customer = customer
-        self.dueDate = dueDate
-        self.value = value
-        self.netValue = netValue
-        self.paymentLink = paymentLink
-        self.subscription = subscription
-        self.installment = installment
-        self.discount = discount
-        self.interest = interest
-        self.fine = fine
-        self.billingType = billingType
-        self.canBePaidAfterDueDate = canBePaidAfterDueDate
-        self.status = status
-        self.pixTransaction = pixTransaction
-        self.pixQrCodeId = pixQrCodeId
-        self.description = description
-        self.externalReference = externalReference
-        self.originalDueDate = originalDueDate
-        self.originalValue = originalValue
-        self.interestValue = interestValue
-        self.confirmedDate = confirmedDate
-        self.paymentDate = paymentDate
-        self.clientPaymentDate = clientPaymentDate
-        self.installmentNumber = installmentNumber
-        self.invoiceUrl = invoiceUrl
-        self.bankSlipUrl = bankSlipUrl
-        self.transactionReceiptUrl = transactionReceiptUrl
-        self.invoiceNumber = invoiceNumber
-        self.deleted = deleted
-        self.postalService = postalService
-        self.anticipated = anticipated
-        self.split = split
-        self.chargeback = chargeback
-        self.refunds = refunds
-        self.municipalInscription = municipalInscription
-        self.stateInscription = stateInscription
-        self.canDelete = canDelete
-        self.cannotBeDeletedReason = cannotBeDeletedReason
-        self.canEdit = canEdit
-        self.cannotEditReason = cannotEditReason
-        self.creditCard = creditCard
+        self.id                    = id
+        self.dateCreated           = dateCreated if type(dateCreated) == date else date.fromisoformat(dateCreated)
+        self.customer              = customer
+        self.dueDate               = dueDate
+        self.value                 = value
+        self.netValue              = kwargs.get('netValue', None)
+        self.paymentLink           = kwargs.get('paymentLink', None)
+        self.subscription          = kwargs.get('subscription', None)
+        self.installment           = kwargs.get('installment', None)
+        self.discount              = kwargs.get('discount', None)
+        self.interest              = kwargs.get('interest', None)
+        self.fine                  = kwargs.get('fine', None)
+        self.billingType           = kwargs.get('billingType', None)
+        self.canBePaidAfterDueDate = kwargs.get('canBePaidAfterDueDate', None)
+        self.status                = kwargs.get('status', None)
+        self.pixTransaction        = kwargs.get('pixTransaction', None)
+        self.pixQrCodeId           = kwargs.get('pixQrCodeId', None)
+        self.description           = kwargs.get('description', None)
+        self.externalReference     = kwargs.get('externalReference', None)
+        self.originalDueDate       = kwargs.get('originalDueDate', None)
+        self.originalValue         = kwargs.get('originalValue', None)
+        self.interestValue         = kwargs.get('interestValue', None)
+        self.confirmedDate         = kwargs.get('confirmedDate', None)
+        self.paymentDate           = kwargs.get('paymentDate', None)
+        self.clientPaymentDate     = kwargs.get('clientPaymentDate', None)
+        self.installmentNumber     = kwargs.get('installmentNumber', None)
+        self.invoiceUrl            = kwargs.get('invoiceUrl', None)
+        self.bankSlipUrl           = kwargs.get('bankSlipUrl', None)
+        self.transactionReceiptUrl = kwargs.get('transactionReceiptUrl', None)
+        self.invoiceNumber         = kwargs.get('invoiceNumber', None)
+        self.deleted               = kwargs.get('deleted', None)
+        self.postalService         = kwargs.get('postalService', None)
+        self.anticipated           = kwargs.get('anticipated', None)
+        self.split                 = kwargs.get('split', None)
+        self.chargeback            = kwargs.get('chargeback', None)
+        self.refunds               = kwargs.get('refunds', None)
+        self.municipalInscription  = kwargs.get('municipalInscription', None)
+        self.stateInscription      = kwargs.get('stateInscription', None)
+        self.canDelete             = kwargs.get('canDelete', None)
+        self.cannotBeDeletedReason = kwargs.get('cannotBeDeletedReason', None)
+        self.canEdit               = kwargs.get('canEdit', None)
+        self.cannotEditReason      = kwargs.get('cannotEditReason', None)
+        self.creditCard            = kwargs.get('creditCard', None)
 
     def __repr__(self) -> str:
         return f'Payment(id={self.id}, customer={self.customer}, billingType={self.billingType}, value={self.value})'

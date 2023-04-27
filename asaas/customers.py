@@ -8,40 +8,27 @@ class Customer:
         dateCreated: date,
         name: str,
         cpfCnpj: str,
-        email: Optional[str] = None,
-        phone: Optional[str] = None,
-        mobilePhone: Optional[str] = None,
-        address: Optional[str] = None,
-        addressNumber: Optional[str] = None,
-        complement: Optional[str] = None, 
-        province: Optional[str] = None,
-        postalCode: Optional[str] = None,
-        externalReference: Optional[str] = None,
-        notificationDisabled: Optional[bool] = None,
-        additionalEmails: Optional[str] = None,
-        municipalInscription: Optional[str] = None,
-        stateInscription: Optional[str] = None,
-        observations: Optional[str] = None
+        **kwargs
     ) -> None:
         
-        self.id = id 
-        self.dateCreated = dateCreated
-        self.name = name 
-        self.cpfCnpj = cpfCnpj 
-        self.email = email
-        self.phone = phone
-        self.mobilePhone = mobilePhone
-        self.address = address
-        self.addressNumber = addressNumber
-        self.complement = complement
-        self.province = province
-        self.postalCode = postalCode
-        self.externalReference = externalReference
-        self.notificationDisabled = notificationDisabled
-        self.additionalEmails = additionalEmails
-        self.municipalInscription = municipalInscription 
-        self.stateInscription = stateInscription 
-        self.observations = observations
+        self.id                   = id 
+        self.dateCreated          = dateCreated if type(dateCreated) == date else date.fromisoformat(dateCreated)
+        self.name                 = name 
+        self.cpfCnpj              = cpfCnpj 
+        self.email                = kwargs.get('email', None)
+        self.phone                = kwargs.get('phone', None)
+        self.mobilePhone          = kwargs.get('mobilePhone', None)
+        self.address              = kwargs.get('address', None)
+        self.addressNumber        = kwargs.get('addressNumber', None)
+        self.complement           = kwargs.get('complement', None)
+        self.province             = kwargs.get('province', None)
+        self.postalCode           = kwargs.get('postalCode', None)
+        self.externalReference    = kwargs.get('externalReference', None)
+        self.notificationDisabled = kwargs.get('notificationDisabled', None)
+        self.additionalEmails     = kwargs.get('additionalEmails', None)
+        self.municipalInscription = kwargs.get('municipalInscription', None) 
+        self.stateInscription     = kwargs.get('stateInscription', None) 
+        self.observations         = kwargs.get('observations', None)
 
     def __repr__(self) -> str:
         return f'Customer(id={self.id}, name={self.name}, email={self.email})'
