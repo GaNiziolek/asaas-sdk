@@ -12,7 +12,7 @@ from asaas.customers import Customer
 from asaas import payments
 from asaas.payments import Payment
 
-from asaas.exceptions import ErroAsaas
+from asaas.exceptions import raise_for_error
 
 class Asaas():
     def __init__(self, access_token, production = False):
@@ -41,15 +41,11 @@ class Asaas():
             params  = params
         )
 
-        try:
-            response.raise_for_status()
-        except HTTPError as e:
-            if 'errors' in response.json():
-                raise ErroAsaas(response.json())
+        raise_for_error(response)
 
         return response.json()
     
-    def post(self, endpoint: str, json: Optional[dict] = None) -> dict:
+    def post(self, endpoint: str, json: dict) -> dict:
 
         response = self.session.post(
             url     = urljoin(self.url, endpoint),
@@ -57,11 +53,7 @@ class Asaas():
             json    = json
         )
 
-        try:
-            response.raise_for_status()
-        except HTTPError as e:
-            if 'errors' in response.json():
-                raise ErroAsaas(response.json())
+        raise_for_error(response)        
 
         return response.json()
 
@@ -351,9 +343,7 @@ if __name__ == '__main__':
 
     asaas = Asaas(acess_token, production = False)
 
-    roberto = asaas.customers.get('cus_000005267821')
-
-    exit()
+    roberto = asaas.customers.get('cus_00000526a7821')
 
     pagamento = asaas.payments.new(
         customer = roberto,
@@ -362,8 +352,9 @@ if __name__ == '__main__':
         dueDate = date.today(),
         creditCard = payments.CreditCard(
             holderName = 'marcelo h almeida',
-            number = '5162306219378829',
-            expiryYear = '2024', expiryMonth = '05',
+            number = '5184019740373151',
+            expiryYear = '2024', 
+            expiryMonth = '05',
             ccv = '318'
         ).json(),
         creditCardHolderInfo = payments.CreditCardHolderInfo(
