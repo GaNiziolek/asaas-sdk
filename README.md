@@ -16,10 +16,11 @@ pip install asaas-sdk
 ```py
 from asaas import Asaas
 
-asaas = Asaas(access_token = 'acess_token', production = False)
+asaas = Asaas(access_token = 'acess_token', url_production='asaas_production_url', production = False)
 
 ``` 
 A variável `acess_token` deve receber um [token válido](https://asaasv3.docs.apiary.io/#introduction/autenticacao).
+A variável `url_production` deve receber a url de produção do Asaas.
 
 
 ### Customers

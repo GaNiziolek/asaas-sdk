@@ -15,12 +15,13 @@ from asaas.payments import Payment
 from asaas.exceptions import raise_for_error
 
 class Asaas():
-    def __init__(self, access_token, production = False):
+    def __init__(self, access_token, url_production, production=False):
 
         self.access_token = access_token
+        self.url_production = url_production
 
         if production:
-            self.url = 'https://www.asaas.com'
+            self.url = url_production
         else:
             self.url = 'https://sandbox.asaas.com'
 
