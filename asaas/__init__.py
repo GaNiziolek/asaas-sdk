@@ -7,10 +7,11 @@ from urllib.parse import urljoin
 from typing import Optional
 from datetime import date
 
-from asaas.customers import Customer
 
 from asaas import payments
 from asaas.payments import Payment
+from asaas.customers import Customer
+from asaas.pix import Pix
 
 from asaas.exceptions import raise_for_error
 
@@ -158,12 +159,20 @@ class Payments:
 
         self.asaas = asaas
 
-    def get(self, id: str) -> dict:
+    def get(self, id: str) -> Payment:
         customer = self.asaas.get(
             endpoint = self.endpoint + '/' + id
         )
 
         return Payment(**customer)
+
+    def get_pix_qr(self, id) -> Pix:
+
+        pix = self.asaas.get(
+            endpoint = f'{self.endpoint}/{id}/pixQrCode'  
+        )
+
+        return Pix(**pix)
 
     def new(self,
             customer: Customer,
@@ -343,6 +352,10 @@ if __name__ == '__main__':
     acess_token = os.getenv('acess_token')
 
     asaas = Asaas(acess_token, production = False)
+
+    pix = asaas.payments.get_pix_qr('pay_6318443155441227')
+
+    exit()
 
     roberto = asaas.customers.get('cus_00000526a7821')
 

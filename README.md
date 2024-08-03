@@ -32,6 +32,9 @@ print(new_customer)
 ```
 
 ### Payments
+
+#### Cartão de crédito
+
 ```py
 
 from asaas.payments import CreditCard, CreditCardHolderInfo, BillingType
@@ -65,4 +68,45 @@ pagamento = asaas.payments.new(
 
 print(pagamento)
 # Payment(id=pay_6954209428403551, customer=Customer(id=cus_000005263646, name=Roberto, email=None), billingType=CREDIT_CARD, value=100)
+
+```
+
+#### Boleto
+
+
+```py
+
+
+pagamento = asaas.payments.new(
+        customer = new_customer,
+        billingType = BillingType.BOLETO,
+        value = 100,
+        dueDate = date.today()
+    )
+
+print(pagamento)
+# Payment(id=pay_6954209428403552, customer=Customer(id=cus_000005263646, name=Roberto, email=None), billingType=BOLETO, value=100, invoiceUrl=https://sandbox.asaas.com/i/6997545710784231)
+
+```
+
+#### Pix
+
+
+```py
+
+pagamento = asaas.payments.new(
+        customer = new_customer,
+        billingType = BillingType.PIX,
+        value = 100,
+        dueDate = date.today()
+    )
+
+print(pagamento)
+# Payment(id=pay_6954209428403553, customer=Customer(id=cus_000005263646, name=Roberto, email=None), billingType=PIX, value=100)
+
+pix_info = asaas.payments.get_pix_qr(pagamento.id)
+
+print(pix_info)
+# 'Pix(success=True, expirationDate=2023-04-27 23:59:59, payload=00020101021226820014br.gov.bcb.pix2560qrpix-...)'
+
 ```

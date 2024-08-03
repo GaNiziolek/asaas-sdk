@@ -33,6 +33,9 @@ def raise_for_error(response: Response):
             case 'invalid_name':
                 raise InvalidName(description)
             
+            case _:
+                raise AsaasError(description)
+            
     elif response.status_code == 404:
         raise NotFound(response.url)
     
