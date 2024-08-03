@@ -15,7 +15,7 @@ from asaas.payments import Payment
 from asaas.exceptions import raise_for_error
 
 class Asaas():
-    def __init__(self, access_token, url_production, production=False):
+    def __init__(self, access_token, production=False, url_production = 'https://api.asaas.com'):
 
         self.access_token = access_token
         self.url_production = url_production
