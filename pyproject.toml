@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "asaas-sdk"
-version = "3.2.0"
+version = "3.3.0"
 authors = [
   { name="Gabriel Niziolek", email="ganiziolek@gmail.com" },
 ]
