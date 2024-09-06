@@ -20,6 +20,7 @@ class Asaas():
 
         self.access_token = access_token
         self.url_production = url_production
+        self.production = production
 
         if production:
             self.url = url_production
@@ -32,8 +33,8 @@ class Asaas():
             'access_token': access_token
         }
 
-        self.customers = Customers(self)
-        self.payments = Payments(self)
+        self.customers = Customers(self, self.production)
+        self.payments = Payments(self, self.production)
 
     def get(self, endpoint: str, params: Optional[dict] = None):
 
@@ -61,9 +62,14 @@ class Asaas():
 
 class Customers():
     
-    def __init__(self, asaas: Asaas) -> None:
+    def __init__(self, asaas: Asaas, production=False) -> None:
         
-        self.endpoint = 'api/v3/customers'
+        self.endpoint = None
+
+        if production:
+            self.endpoint = 'v3/customers/'
+        else:
+            self.endpoint = 'api/v3/customers'
 
         self.asaas = asaas
 
@@ -153,9 +159,14 @@ class Customers():
 
 class Payments:
     
-    def __init__(self, asaas: Asaas) -> None:
-        
-        self.endpoint = 'api/v3/payments'
+    def __init__(self, asaas: Asaas, production=False) -> None:
+
+        self.endpoint = None
+
+        if production:
+            self.endpoint = 'v3/payments/'
+        else:
+            self.endpoint = 'api/v3/payments'
 
         self.asaas = asaas
 
